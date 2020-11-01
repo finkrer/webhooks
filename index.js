@@ -19,6 +19,10 @@ const repo = {
 webhooks.on('push', async ({ payload }) => {
   if (payload.repository.name !== 'finkrer.wtf') return
 
+  console.log(
+    `[*] Got a push notification, commit ${payload.head_commit}, pulling...`
+  )
+
   const deployment = await octokit.repos.createDeployment({
     ...repo,
     ref: payload.ref,
@@ -37,6 +41,7 @@ webhooks.on('push', async ({ payload }) => {
   })
 
   pull.stdout.on('close', () => {
+    if (success) console.log('[*] Pull successful, now buildng...')
     const build = spawn('docker-compose', ['up', '-d', '--build'], {
       cwd: '/finkrer.wtf',
     })
@@ -46,6 +51,9 @@ webhooks.on('push', async ({ payload }) => {
       success = false
     })
     build.stdout.on('close', () => {
+      console.log(
+        `[*] Finished, the build ${success ? 'was successful' : 'failed'}`
+      )
       octokit.repos.createDeploymentStatus({
         ...repo,
         deployment_id: id,
