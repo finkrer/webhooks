@@ -35,22 +35,22 @@ webhooks.on('push', async ({ payload }) => {
 
   let success = true
 
-  pull.stderr.on('data', (data) => {
-    console.log(`[!] Error when pulling: ${data}`)
+  pull.on('error', (error) => {
+    console.log(`[!] Error when pulling: ${error.message}`)
     success = false
   })
 
-  pull.stdout.on('close', () => {
+  pull.on('exit', () => {
     if (success) console.log('[*] Pull successful, now buildng...')
     const build = spawn('docker-compose', ['up', '-d', '--build'], {
       cwd: '/finkrer.wtf',
     })
 
-    build.stderr.on('data', (data) => {
-      console.log(`[!] Error when building: ${data}`)
+    build.on('error', (error) => {
+      console.log(`[!] Error when building: ${error.message}`)
       success = false
     })
-    build.stdout.on('close', () => {
+    build.on('exit', () => {
       console.log(
         `[*] Finished, the build ${success ? 'was successful' : 'failed'}`
       )
