@@ -25,7 +25,7 @@ webhooks.on('push', async ({ payload }) => {
   })
 
   const id = deployment.data.id
-  const pull = spawn('/usr/bin/git', ['pull'], {
+  const pull = spawn('git', ['pull'], {
     cwd: '/finkrer.wtf',
   })
 
@@ -34,7 +34,7 @@ webhooks.on('push', async ({ payload }) => {
   pull.stderr.on('data', () => (success = false))
 
   pull.stdout.on('close', () => {
-    const build = spawn('/usr/bin/docker-compose', ['up', '-d', '--build'], {
+    const build = spawn('docker-compose', ['up', '-d', '--build'], {
       cwd: '/finkrer.wtf',
     })
 
