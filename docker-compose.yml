@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  webhooks:
+    build: .
+    image: webhooks:latest
+    container_name: webhooks
+    restart: unless-stopped
+    ports:
+      - 8888:8888
