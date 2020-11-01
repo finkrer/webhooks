@@ -6,6 +6,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+console.log('[*] Listening on port 8888...')
+
 const webhooks = new Webhooks({ secret: process.env.GITHUB_WEBHOOK_SECRET })
 const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN })
 

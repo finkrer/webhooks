@@ -8,8 +8,6 @@ RUN yarn install
 
 COPY . /app
 
-RUN yarn build
-
 EXPOSE 8888
 
 CMD yarn start
