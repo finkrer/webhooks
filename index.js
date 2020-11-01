@@ -29,16 +29,22 @@ webhooks.on('push', async ({ payload }) => {
     cwd: '/finkrer.wtf',
   })
 
-  const success = true
+  let success = true
 
-  pull.stderr.on('data', () => (success = false))
+  pull.stderr.on('data', (data) => {
+    console.log(`[!] Error when pulling: ${data}`)
+    success = false
+  })
 
   pull.stdout.on('close', () => {
     const build = spawn('docker-compose', ['up', '-d', '--build'], {
       cwd: '/finkrer.wtf',
     })
 
-    build.stderr.on('data', () => (success = false))
+    build.stderr.on('data', () => {
+      console.log(`[!] Error when building: ${data}`)
+      success = false
+    })
     build.stdout.on('close', () => {
       octokit.repos.createDeploymentStatus({
         ...repo,
