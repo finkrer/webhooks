@@ -20,7 +20,7 @@ webhooks.on('push', async ({ payload }) => {
   if (payload.repository.name !== 'finkrer.wtf') return
 
   console.log(
-    `[*] Got a push notification, commit ${payload.head_commit}, pulling...`
+    `[*] Got a push notification, commit ${payload.head_commit.message}, pulling...`
   )
 
   const deployment = await octokit.repos.createDeployment({
