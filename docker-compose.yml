@@ -6,5 +6,7 @@ services:
     image: webhooks:latest
     container_name: webhooks
     restart: unless-stopped
+    volumes:
+      - /finkrer.wtf:/finkrer.wtf
     ports:
       - 8888:8888
