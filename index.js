@@ -41,7 +41,7 @@ webhooks.on('push', async ({ payload }) => {
       cwd: '/finkrer.wtf',
     })
 
-    build.stderr.on('data', () => {
+    build.stderr.on('data', (data) => {
       console.log(`[!] Error when building: ${data}`)
       success = false
     })
